@@ -6,3 +6,31 @@ $ python3 make-cloudvps-email-list.py >> emails.txt
 $ sort emails.txt | uniq > all-emails-sorted.txt
 $ python3 make-opt-out-list.py | sort | uniq > opt-out.txt
 $ grep -vxF -f opt-out.txt all-emails-sorted.txt > emails.txt
+
+Joaquin's instructions for the 2020 run:
+
+```
+ssh labweb1001.wikimedia.org
+$ mkdir cloud-survey-2020
+$ cd cloud-survey-2020/
+~/cloud-survey-2020$ git clone https://github.com/joakin/wmcs-survey-mail-list.git
+~/cloud-survey-2020$ python3 wmcs-survey-mail-list/make-toolforge-user-list.py > users.txt
+~/cloud-survey-2020$ python3 wmcs-survey-mail-list/make-cloudvps-user-list.py >> users.txt
+~/cloud-survey-2020$ sort users.txt | uniq > all-users-sorted.txt
+~/cloud-survey-2020$ vim email.txt # Add email text
+~/cloud-survey-2020$ mwscript extensions/WikimediaMaintenance/sendBulkEmails.php --wiki=labswiki \
+  --subject "Participate in the Wikimedia Cloud Services Annual Survey (2020)" \
+  --body "/home/jhernandez/cloud-survey-2020/email.txt" \
+  --from "Jhernandez" \
+  --to "/home/jhernandez/cloud-survey-2020/all-users-sorted.txt" \
+  --reply-to "Jhernandez" \
+  --optout "Annual_Toolforge_Survey/Opt_out" \
+  --dry-run --delay 0
+~/cloud-survey-2020$ mwscript extensions/WikimediaMaintenance/sendBulkEmails.php --wiki=labswiki \
+  --subject "Participate in the Wikimedia Cloud Services Annual Survey (2020)" \
+  --body "/home/jhernandez/cloud-survey-2020/email.txt" \
+  --from "Jhernandez" \
+  --to "/home/jhernandez/cloud-survey-2020/all-users-sorted.txt" \
+  --reply-to "Jhernandez" \
+  --optout "Annual_Toolforge_Survey/Opt_out"
+```
